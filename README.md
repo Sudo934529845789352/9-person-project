@@ -1,2 +1,2 @@
 # 9-person-project
-9 ppl collab
+This is a collab between 9 people (alt accounts).

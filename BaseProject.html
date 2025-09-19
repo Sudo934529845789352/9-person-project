@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Biography Search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #fff;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #e96443 100%);
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem 0;
+        }
+        .categories {
+            display: flex;
+            gap: 2rem;
+        }
+        .category {
+            position: relative;
+        }
+        .category-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .category-btn:hover, .category-btn.active {
+            background: #2a5298;
+        }
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 2.2rem;
+            left: 0;
+            background: rgba(44, 62, 80, 0.98);
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(31, 38, 135, 0.25);
+            min-width: 220px;
+            z-index: 200;
+        }
+        .dropdown.show {
+            display: block;
+        }
+        .dropdown-item {
+            padding: 0.7rem 1rem;
+            color: #fff;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            transition: background 0.2s;
+        }
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        .dropdown-item:hover {
+            background: #e96443;
+        }
+        .container {
+            background: rgba(0,0,0,0.6);
+            padding: 2rem 3rem;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            margin-top: 5rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+        }
+        p {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        form {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 0.7rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+        }
+        button {
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            border: none;
+            background: #e96443;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #ff6e7f;
+        }
+        .bio-result {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: #fff;
+            min-height: 120px;
+            text-align: left;
+        }
+        .bio-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .bio-section {
+            margin-bottom: 0.7rem;
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 1rem 0.5rem;
+                max-width: 98vw;
+            }
+            .dropdown {
+                min-width: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="topbar">
+        <div class="categories">
+            <div class="category">
+                <button class="category-btn" data-category="Scientists">Scientists</button>
+                <div class="dropdown" id="dropdown-Scientists">
+                    <div class="dropdown-item" data-name="Ada Lovelace">Ada Lovelace</div>
+                    <div class="dropdown-item" data-name="Albert Einstein">Albert Einstein</div>
+                    <div class="dropdown-item" data-name="Marie Curie">Marie Curie</div>
+                    <div class="dropdown-item" data-name="Isaac Newton">Isaac Newton</div>
+                    <div class="dropdown-item" data-name="Katherine Johnson">Katherine Johnson</div>
+                </div>
+            </div>
+            <div class="category">
+                <button class="category-btn" data-category="Leaders">Leaders</button>
+                <div class="dropdown" id="dropdown-Leaders">
+                    <div class="dropdown-item" data-name="Nelson Mandela">Nelson Mandela</div>
+                    <div class="dropdown-item" data-name="Mahatma Gandhi">Mahatma Gandhi</div>
+                    <div class="dropdown-item" data-name="Queen Elizabeth II">Queen Elizabeth II</div>
+                    <div class="dropdown-item" data-name="Abraham Lincoln">Abraham Lincoln</div>
+                </div>
+            </div>
+            <div class="category">
+                <button class="category-btn" data-category="Artists">Artists</button>
+                <div class="dropdown" id="dropdown-Artists">
+                    <div class="dropdown-item" data-name="Leonardo da Vinci">Leonardo da Vinci</div>
+                    <div class="dropdown-item" data-name="Frida Kahlo">Frida Kahlo</div>
+                    <div class="dropdown-item" data-name="Vincent van Gogh">Vincent van Gogh</div>
+                    <div class="dropdown-item" data-name="Pablo Picasso">Pablo Picasso</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Biography Explorer</h1>
+        <p>
+            Welcome to Biography Explorer! Search for a person and read their detailed biography. 
+            Discover inspiring stories from scientists, leaders, and artists who shaped our world. 
+            Use the search bar below or browse by category above to explore more.
+        </p>
+            <form id="searchForm">
+                <input type="text" id="searchInput" placeholder="Type your phrase or a name..." required>
+                <button type="submit">Search</button>
+            </form>
+            <div class="bio-result" id="bioResult">
+                <!-- Biography will appear here -->
+            </div>
+    </div>
+    <script>
+        // Detailed biographies
+        const bios = {
+            "Ada Lovelace": `
+                <div class="bio-title">Ada Lovelace (1815–1852)</div>
+                <div class="bio-section"><strong>Background:</strong> Ada Lovelace was an English mathematician and writer, chiefly known for her work on Charles Babbage's early mechanical general-purpose computer, the Analytical Engine.</div>
+                <div class="bio-section"><strong>Achievements:</strong> She is considered the first computer programmer for her notes on the Analytical Engine, which included what is recognized as the first algorithm intended to be carried out by a machine.</div>
+                <div class="bio-section"><strong>Legacy:</strong> Lovelace's vision of computers going beyond mere number-crunching was far ahead of her time. Ada Lovelace Day is celebrated annually to honor women in STEM.</div>
+            `,
+            "Albert Einstein": `
+                <div class="bio-title">Albert Einstein (1879–1955)</div>
+                <div class="bio-section"><strong>Background:</strong> Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics.</div>
+                <div class="bio-section"><strong>Achievements:</strong> His equation E=mc² is one of the most famous in science. He received the Nobel Prize in Physics in 1921 for his explanation of the photoelectric effect.</div>
+                <div class="bio-section"><strong>Legacy:</strong> Einstein's work revolutionized our understanding of space, time, and energy. He was also known for his advocacy of civil rights and pacifism.</div>
+            `,
+            "Marie Curie": `
+                <div class="bio-title">Marie Curie (1867–1934)</div>
+                <div class="bio-section"><strong>Background:</strong> Marie Curie was a Polish-born physicist and chemist who conducted pioneering research on radioactivity.</div>
+                <div class="bio-section"><strong>Achievements:</strong> She was the first woman to win a Nobel Prize, and the only person to win Nobel Prizes in two different sciences (Physics and Chemistry).</div>
+                <div class="bio-section"><strong>Legacy:</strong> Curie's discoveries led to advances in cancer treatment and nuclear physics. She founded the Radium Institute in Paris.</div>
+            `,
+            "Isaac Newton": `
+                <div class="bio-title">Isaac Newton (1642–1727)</div>
+                <div class="bio-section"><strong>Background:</strong> Isaac Newton was an English mathematician, physicist, astronomer, and author.</div>
+                <div class="bio-section"><strong>Achievements:</strong> He formulated the laws of motion and universal gravitation, laying the groundwork for classical mechanics. He also made significant contributions to optics and mathematics (inventing calculus independently).</div>
+                <div class="bio-section"><strong>Legacy:</strong> Newton's Principia Mathematica is considered one of the most influential works in science history.</div>
+            `,
+            "Katherine Johnson": `
+                <div class="bio-title">Katherine Johnson (1918–2020)</div>
+                <div class="bio-section"><strong>Background:</strong> Katherine Johnson was an American mathematician whose calculations of orbital mechanics were critical to the success of the first and subsequent U.S. crewed spaceflights.</div>
+                <div class="bio-section"><strong>Achievements:</strong> Her work at NASA helped send astronauts to the Moon and return safely. She was awarded the Presidential Medal of Freedom in 2015.</div>
+                <div class="bio-section"><strong>Legacy:</strong> Johnson broke barriers for women and African Americans in STEM. Her story was popularized in the film "Hidden Figures."</div>
+            `,
+            "Nelson Mandela": `
+                <div class="bio-title">Nelson Mandela (1918–2013)</div>
+                <div class="bio-section"><strong>Background:</strong> Nelson Mandela was a South African anti-apartheid activist and politician who served as the country's first black president.</div>
+                <div class="bio-section"><strong>Achievements:</strong> He spent 27 years in prison for his activism, then led South Africa through reconciliation and the end of apartheid.</div>
+                <div class="bio-section"><strong>Legacy:</strong> Mandela is celebrated worldwide for his leadership, forgiveness, and fight for equality and human rights.</div>
+            `,
+            "Mahatma Gandhi": `
+                <div class="bio-title">Mahatma Gandhi (1869–1948)</div>
+                <div class="bio-section"><strong>Background:</strong> Gandhi was an Indian lawyer, anti-colonial nationalist, and political ethicist who led the successful campaign for India's independence from British rule.</div>
+                <div class="bio-section"><strong>Achievements:</strong> He pioneered nonviolent resistance and inspired movements for civil rights and freedom across the world.</div>
+                <div class="bio-section"><strong>Legacy:</strong> Gandhi's philosophy of nonviolence continues to influence global leaders and activists.</div>
+            `,
+            "Queen Elizabeth II": `
+                <div class="bio-title">Queen Elizabeth II (1926–2022)</div>
+                <div class="bio-section"><strong>Background:</strong> Queen Elizabeth II was the longest-reigning monarch in British history, serving as queen from 1952 until her death in 2022.</div>
+                <div class="bio-section"><strong>Achievements:</strong> She guided the monarchy through decades of change, modernization, and global events.</div>
+                <div class="bio-section"><strong>Legacy:</strong> Her reign was marked by stability, dedication, and service to the Commonwealth.</div>
+            `,
+            "Abraham Lincoln": `
+                <div class="bio-title">Abraham Lincoln (1809–1865)</div>
+                <div class="bio-section"><strong>Background:</strong> Abraham Lincoln was the 16th president of the United States, leading the nation through the American Civil War.</div>
+                <div class="bio-section"><strong>Achievements:</strong> He abolished slavery with the Emancipation Proclamation and preserved the Union.</div>
+                <div class="bio-section"><strong>Legacy:</strong> Lincoln is remembered for his leadership, speeches, and commitment to equality.</div>
+            `,
+            "Leonardo da Vinci": `
+                <div class="bio-title">Leonardo da Vinci (1452–1519)</div>
+                <div class="bio-section"><strong>Background:</strong> Leonardo da Vinci was an Italian polymath of the Renaissance, known for his works in art, science, and engineering.</div>
+                <div class="bio-section"><strong>Achievements:</strong> He painted masterpieces like the Mona Lisa and The Last Supper, and made significant discoveries in anatomy, engineering, and physics.</div>
+                <div class="bio-section"><strong>Legacy:</strong> Da Vinci's notebooks and inventions continue to inspire innovation and creativity.</div>
+            `,
+            "Frida Kahlo": `
+                <div class="bio-title">Frida Kahlo (1907–1954)</div>
+                <div class="bio-section"><strong>Background:</strong> Frida Kahlo was a Mexican painter known for her many portraits, self-portraits, and works inspired by the nature and artifacts of Mexico.</div>
+                <div class="bio-section"><strong>Achievements:</strong> Her art explored identity, postcolonialism, gender, class, and race in Mexican society.</div>
+                <div class="bio-section"><strong>Legacy:</strong> Kahlo is celebrated as a feminist icon and one of the most influential artists of the 20th century.</div>
+            `,
+            "Vincent van Gogh": `
+                <div class="bio-title">Vincent van Gogh (1853–1890)</div>
+                <div class="bio-section"><strong>Background:</strong> Vincent van Gogh was a Dutch post-impressionist painter who is among the most famous and influential figures in the history of Western art.</div>
+                <div class="bio-section"><strong>Achievements:</strong> He created over 2,000 artworks, including "Starry Night" and "Sunflowers," known for their bold colors and emotional honesty.</div>
+                <div class="bio-section"><strong>Legacy:</strong> Van Gogh's life and art have inspired countless artists and admirers worldwide.</div>
+            `,
+            "Pablo Picasso": `
+                <div class="bio-title">Pablo Picasso (1881–1973)</div>
+                <div class="bio-section"><strong>Background:</strong> Pablo Picasso was a Spanish painter, sculptor, printmaker, ceramicist and theatre designer who spent most of his adult life in France.</div>
+                <div class="bio-section"><strong>Achievements:</strong> He co-founded the Cubist movement and created thousands of works, including "Guernica" and "Les Demoiselles d'Avignon."</div>
+                <div class="bio-section"><strong>Legacy:</strong> Picasso is regarded as one of the most influential artists of the 20th century.</div>
+            `
+        };
+
+        // Dropdown logic
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                const cat = btn.getAttribute('data-category');
+                document.getElementById('dropdown-' + cat).classList.add('show');
+                btn.classList.add('active');
+            });
+        });
+        // Hide dropdowns when clicking outside
+        document.body.addEventListener('click', function() {
+            document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+        });
+        // Show biography when clicking dropdown item
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const name = item.getAttribute('data-name');
+                const bioDiv = document.getElementById('bioResult');
+                if (bios[name]) {
+                    bioDiv.innerHTML = bios[name];
+                } else {
+                    bioDiv.textContent = "Biography not found.";
+                }
+                document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('show'));
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            });
+        });
+
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('searchInput').value.trim();
+            const bioDiv = document.getElementById('bioResult');
+                if (name === 'break down the barrier') {
+                    const newWindow = window.open('about:blank', '_blank');
+                    newWindow.document.write(`
+                        <html>
+                        <head>
+                            <title>Secret Games Casino</title>
+                            <style>
+                                body { background: #0074D9; margin: 0; }
+                                h1 { color: white; text-align: center; padding: 40px 0 0 0; font-size: 2.5em; }
+                            </style>
+                        </head>
+                        <body>
+                            <h1>Welcome to the Secret Games Casino</h1>
+                        </body>
+                        </html>
+                    `);
+                    newWindow.document.close();
+                } else if (bios[name]) {
+                    bioDiv.innerHTML = bios[name];
+                } else {
+                    bioDiv.innerHTML = `<div class="bio-title">Biography not found.</div>
+                    <div class="bio-section">Try searching for Ada Lovelace, Albert Einstein, Marie Curie, Nelson Mandela, Isaac Newton, Katherine Johnson, Mahatma Gandhi, Queen Elizabeth II, Abraham Lincoln, Leonardo da Vinci, Frida Kahlo, Vincent van Gogh, or Pablo Picasso.</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
